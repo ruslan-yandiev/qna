@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
-
-  expose :answer, -> { find_question.answers }
+  
+  # гем 'decent_exposure' позволяет и в такой форме получать параметры
+  expose :question, id: :question_id
+  expose :answer, -> { question.answers }
 
   def create
     @answer = answer.new(answer_params)
@@ -13,10 +15,6 @@ class AnswersController < ApplicationController
   end
 
   private
-
-  def find_question
-    @question = Question.find(params[:question_id])
-  end
 
   def answer_params
     params.require(:answer).permit(:body)
