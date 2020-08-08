@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
+  let(:answer) { create(:answer, question: question) }
 
   describe 'POST #create' do
     context 'with valid attributes' do
@@ -23,6 +24,19 @@ RSpec.describe AnswersController, type: :controller do
       it 're-renders new view ' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
         expect(response).to render_template :new
+      end
+    end
+  end
+
+    describe 'PATCH #update' do
+    context 'whith valid attributes' do
+      it 'change answer attributes' do
+        patch :update, params: { id: answer, answer: { body: 'new body' }, question_id: question }
+
+        # reload обновит наш объект теми данными которые есть в БД
+        answer.reload
+
+        expect(answer.body).to eq 'new body'
       end
     end
   end
