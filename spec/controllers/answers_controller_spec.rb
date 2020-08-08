@@ -38,6 +38,29 @@ RSpec.describe AnswersController, type: :controller do
 
         expect(answer.body).to eq 'new body'
       end
+
+      it 'redirects to updated answer' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer), question_id: question }
+        expect(response).to redirect_to answer
+      end
     end
+
+    # context 'whith invalid attributes' do
+    #   # этап выполнит код перед запуском каждого из тестов
+    #   before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+
+    #   # этапы проверки результата:
+    #   it 'does not change question' do
+    #     question.reload
+
+    #     # чтобы не получился ложноположительный тест, возьмемм вручную данные из фабрики MyString и MyText и укажем в явном виде
+    #     expect(question.title).to eq 'MyString'
+    #     expect(question.body).to eq 'MyText'
+    #   end
+
+    #   it 're-renders edit view' do
+    #     expect(response).to render_template :edit
+    #   end
+    # end
   end
 end
