@@ -45,22 +45,16 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    # context 'whith invalid attributes' do
-    #   # этап выполнит код перед запуском каждого из тестов
-    #   before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+    context 'whith invalid attributes' do
+      # выполним перед запуском каждого теста в этом контексте
+      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), question_id: question } }
 
-    #   # этапы проверки результата:
-    #   it 'does not change question' do
-    #     question.reload
+      it 'does not change answer' do
+        answer.reload
 
-    #     # чтобы не получился ложноположительный тест, возьмемм вручную данные из фабрики MyString и MyText и укажем в явном виде
-    #     expect(question.title).to eq 'MyString'
-    #     expect(question.body).to eq 'MyText'
-    #   end
-
-    #   it 're-renders edit view' do
-    #     expect(response).to render_template :edit
-    #   end
-    # end
+        # чтобы не получился ложноположительный тест, возьмемм вручную данные MyText из фабрики и укажем в явном виде
+        expect(answer.body).to eq 'MyText'
+      end
+    end
   end
 end
