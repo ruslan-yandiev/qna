@@ -55,6 +55,10 @@ RSpec.describe AnswersController, type: :controller do
         # чтобы не получился ложноположительный тест, возьмемм вручную данные MyText из фабрики и укажем в явном виде
         expect(answer.body).to eq 'MyText'
       end
+
+      it 're-renders edit view' do
+        expect(response).to render_template :edit
+      end
     end
   end
 end
