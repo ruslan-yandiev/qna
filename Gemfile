@@ -29,6 +29,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'slim-rails'
+gem 'devise'
 
 # библиотека позволит сократить стандартный код в контролерах
 gem 'decent_exposure', '3.0.0'
@@ -58,6 +59,7 @@ group :test do
   # для более простого и краткого способа тестить валидации и ассоциации
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
+  gem 'launchy'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
