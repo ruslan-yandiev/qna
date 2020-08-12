@@ -7,9 +7,10 @@ feature 'User can sign in', %q{
   As an unauthenticated user
   I`d like to be able to sign in
 } do
-  
+
   # элиас метода let и как и он без ! будет ленивым, используется в фича тестах
-  given(:user) { User.create!(email: 'user@test.com', password: '12345678') }
+  # given(:user) { User.create!(email: 'user@test.com', password: '12345678') }
+  given(:user) { create(:user) }
 
   # элиас before но в фича тестах используется background
   background do

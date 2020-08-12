@@ -6,8 +6,8 @@ feature 'User can create question', %q{
   I`d like to be able to aks the question
 } do
 
-  given(:user) { User.create!(email: 'user@test.com', password: '12345678') }
-
+  given(:user) { create(:user) }
+  
   scenario 'Authenticated user asks a question' do
     visit new_user_session_path
     fill_in 'Email', with: user.email

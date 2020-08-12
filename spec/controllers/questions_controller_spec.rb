@@ -7,6 +7,10 @@ RSpec.describe QuestionsController, type: :controller do
   # let! - выполнит всю работу по созданию данных и помещения их в объект массива перед запуска каждого из тестов
   # let(:questions) { create_list(:question, 3) }
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  
+  # используем созданный нами хелпер login
+  before { login(user) }
 
   describe 'POST #create' do
     # context является элиfсом describe
