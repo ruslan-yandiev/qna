@@ -40,8 +40,8 @@ RSpec.configure do |config|
   # подключим наш модуль ControllerHelpers и только для тестов контроллеров
   config.include ControllerHelpers, type: :controller
 
-    # подключим наш модуль FeatureHelpers и только для фича тестов
-    config.include FeatureHelpers, type: :feature
+  # подключим наш модуль FeatureHelpers и только для фича тестов
+  config.include FeatureHelpers, type: :feature
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
