@@ -19,7 +19,7 @@ require 'rspec/rails'
 # of increasing the boot-up time by auto-requiring all files in the support
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
-# удобно require наши хелперы из spec/support
+# Удобно require(зарикваерим-импортируем) наши файлы с хелперами из директории spec/support
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
@@ -37,8 +37,11 @@ RSpec.configure do |config|
   # подключим специальный модуль для использования в тестах gem Devise
   config.include Devise::Test::ControllerHelpers, type: :controller
   
-  # подключим наш ControllerHelpers
+  # подключим наш модуль ControllerHelpers и только для тестов контроллеров
   config.include ControllerHelpers, type: :controller
+
+    # подключим наш модуль FeatureHelpers и только для фича тестов
+    config.include FeatureHelpers, type: :feature
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

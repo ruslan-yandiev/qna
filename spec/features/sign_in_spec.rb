@@ -19,6 +19,7 @@ feature 'User can sign in', %q{
   end
 
   scenario 'Registered user tries to sign in' do
+    # fill_in, click_on DSL гема capybara
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
     # универсальный хелпер умеющий кликать и по кнопкам и по ссылкам
