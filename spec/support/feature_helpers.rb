@@ -10,10 +10,10 @@ module FeatureHelpers
   end
 
   def sign_up(*params)
-    if params[0].class == String
-      user = User.new(email: params[0], password: params[1], password_confirmation: params[2])
-    else
+    if params[0].is_a? User
       user = params[0]
+    else
+      user = User.new(email: params[0], password: params[1], password_confirmation: params[2])
     end
 
     visit new_user_registration_path
