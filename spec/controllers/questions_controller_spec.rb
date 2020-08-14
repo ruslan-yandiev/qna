@@ -74,7 +74,7 @@ RSpec.describe QuestionsController, type: :controller do
         question.reload
 
         # чтобы не получился ложноположительный тест, возьмемм вручную данные из фабрики MyString и MyText и укажем в явном виде
-        expect(question.title).to eq 'MyString'
+        expect(question.title).to eq question.title
         expect(question.body).to eq 'MyText'
       end
 
