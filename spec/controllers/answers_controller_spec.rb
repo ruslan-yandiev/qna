@@ -5,9 +5,9 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
   let(:answer) { create(:answer, question: question) }
 
-  describe 'POST #create' do
-    before { login(user) }
+  before { login(user) }
 
+  describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
@@ -31,7 +31,7 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-    describe 'PATCH #update' do
+  describe 'PATCH #update' do
     context 'whith valid attributes' do
       it 'change answer attributes' do
         patch :update, params: { id: answer, answer: { body: 'new body' }, question_id: question }

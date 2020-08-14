@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+
+  before_action :authenticate_user!, except: %i[index show]
   
   # гем 'decent_exposure' позволяет и в такой форме получать параметры
   expose :question, id: :question_id
@@ -8,7 +10,7 @@ class AnswersController < ApplicationController
   def create
     @answer = answers.new(answer_params)
     @answer.user = current_user
-    
+
     if @answer.save
       redirect_to answer_path(@answer)
     else
