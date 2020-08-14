@@ -4,7 +4,7 @@ FactoryBot.define do
     "user#{n}@test.com"
   end
 
-  factory :user do
+  factory :user, aliases: [:author] do
     # название атрибута и самой последовательности совпадает, по этому просто укажем email
     email
     password { '12345678' }

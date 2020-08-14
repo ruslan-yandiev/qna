@@ -13,6 +13,11 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
       end
 
+      it 'answer belongs to the author' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question }
+        expect(question.answers.last.user_id).to eq(user.id)
+      end
+
       it 'redirects to answer show view' do
         post :create, params: { answer: attributes_for(:answer), question_id: question }
         expect(response).to redirect_to assigns(:question)
@@ -56,7 +61,7 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
 
         # чтобы не получился ложноположительный тест, возьмемм вручную данные MyText из фабрики и укажем в явном виде
-        expect(answer.body).to eq 'MyText'
+        expect(answer.body).to eq 'My_Answer_Text'
       end
 
       it 're-renders edit view' do
@@ -66,15 +71,31 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:answer) { create(:answer, question: question) }
 
-    it 'delete the answer' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    context 'Author of the answer' do
+      let!(:answer) { create(:answer, question: question, user: user) }
+      
+      it 'delete the answer' do
+        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question
+    context 'Not the author of the answer' do
+      let!(:answer) { create(:answer, question: question) }
+      
+      it 'Answer is not deleted' do
+        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: answer }
+        expect(response).to_not redirect_to question
+      end
     end
   end
 end

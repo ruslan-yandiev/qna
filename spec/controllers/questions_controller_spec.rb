@@ -8,10 +8,10 @@ RSpec.describe QuestionsController, type: :controller do
   # let(:questions) { create_list(:question, 3) }
   let(:question) { create(:question) }
   let(:user) { create(:user) }
-  
+
   # используем созданный нами хелпер login
   before { login(user) }
-
+  
   describe 'POST #create' do
     # context является элиfсом describe
     # describe используем для описания некой функциональности, context а контекст некие условия вариаций внутри describe
@@ -85,15 +85,30 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:question) { create(:question) }
+    context 'Author of the question' do
+      let!(:question) { create(:question, user: user) }
 
-    it 'delete the question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      it 'delete the question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context 'Not the author of the question' do
+      let!(:question) { create(:question) }
+
+      it 'Question is not deleted' do
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+        expect(response).to_not redirect_to questions_path
+      end
     end
   end
 end
