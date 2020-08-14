@@ -1,2 +1,6 @@
 h1= question.title
-p= question.body
+h3= question.body
+
+= render question.answers
+= render 'shared/errors', resource: set_answer
+= render template: 'answers/_form', locals: { question: question, answer: set_answer }

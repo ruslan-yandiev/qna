@@ -8,13 +8,15 @@ class AnswersController < ApplicationController
   expose :answer
 
   def create
+    @question = question
     @answer = answers.new(answer_params)
     @answer.user = current_user
 
     if @answer.save
-      redirect_to answer_path(@answer)
+      redirect_to question_path(question), alert: 'Your answer succesfully created'
     else
-      render :new
+      # flash.now[:notice] = "Body can't be blank"
+      render 'questions/show'
     end
   end
 
