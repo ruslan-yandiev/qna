@@ -20,7 +20,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to answer show view' do
         post :create, params: { answer: attributes_for(:answer), question_id: question }
-        expect(response).to redirect_to assigns(:question)
+        expect(response).to redirect_to question
       end
     end
 

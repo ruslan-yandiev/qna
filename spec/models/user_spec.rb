@@ -15,13 +15,14 @@ RSpec.describe User, type: :model do
     let(:answer) { create(:answer, question: question, user: author) }
 
     it 'return true if the author is the creator' do
-      expect(author.id).to eq question.user_id
-      expect(author.id).to eq answer.user_id
+      # просто к be_ добавить без предиката (?) свой реализованный метод (author?) который мы тестируем, а предикат(?) автоматичеки подставится
+      expect(author).to be_author(question)
+      expect(author).to be_author(answer)
     end
 
     it 'return false if the user is not the creator' do
-      expect(user.id).to_not eq question.user_id
-      expect(user.id).to_not eq answer.user_id
+      expect(user).to_not be_author(question)
+      expect(user).to_not be_author(answer)
     end
   end
 end
