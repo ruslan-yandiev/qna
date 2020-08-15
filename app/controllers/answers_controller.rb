@@ -8,7 +8,6 @@ class AnswersController < ApplicationController
   expose :answer
 
   def create
-    # @question = question
     @answer = answers.new(answer_params)
     @answer.user = current_user
 
