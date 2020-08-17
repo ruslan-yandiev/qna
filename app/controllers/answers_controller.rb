@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+
+  before_action :authenticate_user!, except: %i[index show]
   
   # гем 'decent_exposure' позволяет и в такой форме получать параметры
   expose :question, id: :question_id
@@ -7,11 +9,13 @@ class AnswersController < ApplicationController
 
   def create
     @answer = answers.new(answer_params)
+    @answer.user = current_user
 
     if @answer.save
-      redirect_to answer_path(@answer)
+      redirect_to question_path(question), alert: 'Your answer succesfully created'
     else
-      render :new
+      # flash.now[:notice] = "Body can't be blank"
+      render 'questions/show'
     end
   end
 
@@ -24,8 +28,12 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    answer.destroy
-    redirect_to answer.question
+    if current_user&.author?(answer)
+      answer.destroy
+      redirect_to answer.question, notice: 'Answer succesfully deleted'
+    else
+      redirect_to question, alert: 'You cannot delete this answer'
+    end
   end
 
   private

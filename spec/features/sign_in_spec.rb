@@ -12,18 +12,14 @@ feature 'User can sign in', %q{
   # given(:user) { User.create!(email: 'user@test.com', password: '12345678') }
   given(:user) { create(:user) }
 
-  # элиас before но в фича тестах используется background
-  background do
-    # укажем хелпер маршрута new_user_session либо '/users/sign_in' созданный gem 'devise' 
-    visit new_user_session_path
-  end
+  # # элиас before но в фича тестах используется background
+  # background do
+  #   # укажем хелпер маршрута new_user_session либо '/users/sign_in' созданный gem 'devise' 
+  #   visit new_user_session_path
+  # end
 
   scenario 'Registered user tries to sign in' do
-    # fill_in, click_on DSL гема capybara
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    # универсальный хелпер умеющий кликать и по кнопкам и по ссылкам
-    click_on 'Log in'
+    sign_in(user)
 
     # # для использования нужно поставить gem 'launchy'
     # # команда позволяет сохранять и открытвать страницу, вставляем в строку где возникла ошибка, облегчит понимание
@@ -33,7 +29,10 @@ feature 'User can sign in', %q{
     # 'Signed in successfully.' в нашем случе укажем в качестве ожидаемого результата сообщение которое вернет gem 'devise'
     expect(page).to have_content 'Signed in successfully.'
   end
+
   scenario 'Unregistered user tries to sign in' do
+    # укажем хелпер маршрута new_user_session либо '/users/sign_in' созданный gem 'devise'
+    visit new_user_session_path
     fill_in 'Email', with: 'wrong@test.com'
     fill_in 'Password', with: '12345678'
     click_on 'Log in'
