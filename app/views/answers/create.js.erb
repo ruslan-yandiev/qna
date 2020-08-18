@@ -1,0 +1,7 @@
+document.querySelector(".answer-errors").insertAdjacentHTML("beforeend", "<%= render 'shared/errors', resource: set_answer %>");
+
+<% if @answer.persisted? %>
+  <%# хелпер (j) экранирует выводимые данные и защитит нас от вредоносных JS инъекцый. Преобразуя все в текст %>
+  document.querySelector(".answers").insertAdjacentHTML("beforeend", "<%= j render @answer %>");
+  document.querySelector(".answer_create").querySelector("#answer_body").value = ''
+<% end %>

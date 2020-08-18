@@ -10,28 +10,28 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js }.to change(question.answers, :count).by(1)
       end
 
       it 'answer belongs to the author' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
+        post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js
         expect(question.answers.last.user_id).to eq(user.id)
       end
 
-      it 'redirects to answer show view' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
-        expect(response).to redirect_to question
-      end
+      # it 'redirects to answer show view' do
+      #   post :create, params: { answer: attributes_for(:answer), question_id: question }
+      #   expect(response).to redirect_to question
+      # end
     end
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
+        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 're-renders new view ' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-        expect(response).to render_template 'questions/show'
+      it 'renders create template' do
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question },format: :js
+        expect(response).to render_template :create
       end
     end
   end
@@ -39,7 +39,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #update' do
     context 'whith valid attributes' do
       it 'change answer attributes' do
-        patch :update, params: { id: answer, answer: { body: 'new body' }, question_id: question }
+        patch :update, params: { id: answer, answer: { body: 'new body' }, question_id: question }, format: :js
 
         # reload обновит наш объект теми данными которые есть в БД
         answer.reload
@@ -47,25 +47,27 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq 'new body'
       end
 
-      it 'redirects to updated answer' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer), question_id: question }
-        expect(response).to redirect_to answer
+      it 'render update view' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer), question_id: question }, format: :js
+        expect(response).to render_template :update
       end
     end
 
     context 'whith invalid attributes' do
       # выполним перед запуском каждого теста в этом контексте
-      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), question_id: question } }
+      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }
 
       it 'does not change answer' do
         answer.reload
 
-        # чтобы не получился ложноположительный тест, возьмемм вручную данные MyText из фабрики и укажем в явном виде
-        expect(answer.body).to eq 'My_Answer_Text'
+        # чтобы не получился ложноположительный тест, возьмемм вручную данные My_Answer_Text из фабрики и укажем в явном виде
+        # expect(answer.body).to eq 'My_Answer_Text'
+
+        expect { answer.body }.to_not change(answer, :body)
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+      it 'render update view' do
+        expect(response).to render_template :update
       end
     end
   end

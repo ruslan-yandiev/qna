@@ -1,4 +1,19 @@
 - if answer.persisted?
-  p= answer.body
-  - if current_user&.author?(answer)
-    p= link_to 'Delete answer', answer_path(answer), method: :delete, data: { confirm: 'Are you sure?' }
+  div id="answer_id_#{answer.id}"
+    p
+      = answer.body
+      
+    - if current_user&.author?(answer)
+      p= link_to 'Delete answer', answer_path(answer), method: :delete, data: { confirm: 'Are you sure?' }
+      |
+      / вторым аргументом обычно идет путь(edit_answer_path(answer)), но мы поставим решотку(#) так как путь изменяться не будет, кнопка через скрипт будет работать
+      / data: { answer_id: answer.id } свяжем конкретный вопрос с кнопкой по его id
+      p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }, id: "edit-answer-link-#{answer.id}"
+
+  / html: { id: "edit-answer-#{answer.id}" } для того, чтобы задать id у формы, а затем связать кнопку Edit с формой
+  = form_with model: answer, class: "hidden-answer-edit", html: { id: "edit-answer-#{answer.id}" } do |form|
+    p
+      = form.label :body, 'Your answer'
+      = form.text_area :body
+
+    p= form.submit 'Save'

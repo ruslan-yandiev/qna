@@ -8,7 +8,7 @@ feature 'User can create answer', %q{
 
   given!(:question) { create(:question) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     given(:user) { create(:user) }
 
     background do
@@ -20,8 +20,15 @@ feature 'User can create answer', %q{
       fill_in 'Body', with: 'text text text'
       click_on 'create'
 
-      expect(page).to have_content 'Your answer succesfully created'
-      expect(page).to have_content "text text text"
+      # проверяем, что мосле создания ответа мы остались на той же странице вопроса и нас не перекинуло
+      expect(current_path).to eq question_path(question)
+
+      # expect(page).to have_content 'Your answer succesfully created'
+
+      # within ограничивает область страницы в которой делаем проверку
+      within '.answers' do # Чтобы убедиться, что ответ в списке в div с классом answers, а не в форме
+        expect(page).to have_content "text text text"
+      end
     end
 
     scenario 'create an answer with error' do
