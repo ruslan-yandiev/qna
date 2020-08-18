@@ -15,6 +15,7 @@ class AnswersController < ApplicationController
   end
 
   def update
+    return if !current_user&.author?(answer)
     answer.update(answer_params)
   end
 

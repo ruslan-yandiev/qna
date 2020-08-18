@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:user) { create(:user) }
+  let(:author) { create(:author) }
   let(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question) }
+  let(:answer) { create(:answer, question: question, user: author) }
 
-  before { login(user) }
+  before { login(author) }
 
   describe 'POST #create' do
     context 'with valid attributes' do
@@ -15,7 +15,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'answer belongs to the author' do
         post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js
-        expect(question.answers.last.user_id).to eq(user.id)
+        expect(question.answers.last.user_id).to eq(author.id)
       end
 
       it 'renders create template' do
@@ -70,12 +70,23 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template :update
       end
     end
+
+    context 'Only the author can update his answer' do
+      before { sign_in(create(:user)) }
+
+      it 'answer body has not changed' do
+        old_answer_body = answer.body
+        patch :update, params: { id: answer, answer: { body: 'new answer' }, format: :js }
+        answer.reload
+        expect(answer.body).to eq old_answer_body
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
 
     context 'Author of the answer' do
-      let!(:answer) { create(:answer, question: question, user: user) }
+      let!(:answer) { create(:answer, question: question, user: author) }
       
       it 'delete the answer' do
         expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
