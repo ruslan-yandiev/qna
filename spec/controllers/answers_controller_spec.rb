@@ -75,10 +75,9 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_in(create(:user)) }
 
       it 'answer body has not changed' do
-        old_answer_body = answer.body
         patch :update, params: { id: answer, answer: { body: 'new answer' }, format: :js }
         answer.reload
-        expect(answer.body).to eq old_answer_body
+        expect(answer.body).to_not eq 'new answer'
       end
     end
   end

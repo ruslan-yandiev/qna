@@ -11,7 +11,7 @@
       p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }, id: "edit-answer-link-#{answer.id}"
 
   / html: { id: "edit-answer-#{answer.id}" } для того, чтобы задать id у формы, а затем связать кнопку Edit с формой
-  = form_with model: answer, class: "hidden-answer-edit", html: { id: "edit-answer-#{answer.id}" } do |form|
+  = form_with model: answer, class: "hidden", html: { id: "edit-answer-#{answer.id}" } do |form|
     p
       = form.label :body, 'Your answer'
       = form.text_area :body
