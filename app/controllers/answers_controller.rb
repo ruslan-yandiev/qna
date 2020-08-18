@@ -8,31 +8,15 @@ class AnswersController < ApplicationController
   expose :answer
 
   def create
-    @answer = answers.new(answer_params)
-    @answer.user = current_user
-    @answer.save
-
-    # if @answer.save
-      # redirect_to question_path(question), alert: 'Your answer succesfully created'
-    # else
-    #   # flash.now[:notice] = "Body can't be blank"
-    #   render 'questions/show'
-    # end
+    # @answer = answers.new(answer_params)
+    # @answer.user = current_user
+    # @answer.save
+    @answer = answers.create(answer_params.merge(user_id: current_user.id))
   end
 
   def update
     answer.update(answer_params)
-
-    # if answer.update(answer_params)
-    #   redirect_to answer_path(answer)
-    # else
-    #   render :edit
-    # end
   end
-
-  # def edit
-
-  # end
 
   def destroy
     if current_user&.author?(answer)

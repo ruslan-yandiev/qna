@@ -18,10 +18,10 @@ RSpec.describe AnswersController, type: :controller do
         expect(question.answers.last.user_id).to eq(user.id)
       end
 
-      # it 'redirects to answer show view' do
-      #   post :create, params: { answer: attributes_for(:answer), question_id: question }
-      #   expect(response).to redirect_to question
-      # end
+      it 'renders create template' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js
+        expect(response).to render_template :create
+      end
     end
 
     context 'with invalid attributes' do
