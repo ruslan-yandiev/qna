@@ -1,4 +1,4 @@
-document.querySelector(".answer-errors").innerHTML = "<%= render 'shared/errors', resource: @answer %>";
+document.querySelector(".answer-errors").innerHTML = "<%= render 'shared/errors', resource: answer %>";
 
 <% if !answer.errors.present? %>
   <%# хелпер (j) экранирует выводимые данные и защитит нас от вредоносных JS инъекцый. Преобразуя все в текст %>
