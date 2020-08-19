@@ -105,4 +105,26 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #best' do
+    context 'user set a best answer to own question' do
+      it 'chooses the answer as the best' do
+        patch :best, params: { id: answer }, format: :js
+        answer.reload
+        expect(answer).to be_best
+      end
+    end
+
+    context 'user tries to set a best answer to not own question' do
+      let(:other_answer) { create(:answer, :best, question: question) }
+
+      it 'does not choose the answer as the best' do
+        sign_in(create(:user))
+
+        patch :best, params: { id: answer }, format: :js
+        answer.reload
+        expect(answer).not_to be_best
+      end
+    end
+  end
 end

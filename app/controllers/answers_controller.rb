@@ -25,6 +25,11 @@ class AnswersController < ApplicationController
     end
   end
 
+  def best
+    return if !current_user&.author?(answer)
+    answer.set_best_value
+  end
+
   private
 
   def answer_params
