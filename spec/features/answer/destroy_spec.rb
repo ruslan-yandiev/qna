@@ -8,12 +8,12 @@ feature 'User can delete answer' do
   describe 'Registered user' do
     given(:user) { create(:user) }
 
-    scenario 'Author can delete answer' do
+    scenario 'Author can delete answer', js: true do
       sign_in(author)
       visit question_path(question)
       click_on 'Delete answer'
+      page.driver.browser.switch_to.alert.accept
 
-      expect(page).to have_content 'Answer succesfully deleted'
       expect(page).to_not have_content answer.body
     end
 
