@@ -11,22 +11,22 @@ class AnswersController < ApplicationController
     # @answer = answers.new(answer_params)
     # @answer.user = current_user
     # @answer.save
-    @answer = answers.create(answer_params.merge(user_id: current_user.id))
+    @answer = answers.create(answer_params.merge(user: current_user))
   end
 
   def update
-    return if !current_user&.author?(answer)
+    # Если текущий пользователь не автор ответа, то вернем ошибку со статусом 403
+    return head :forbidden if !current_user&.author?(answer)
     answer.update(answer_params)
   end
 
   def destroy
-    if current_user&.author?(answer)
-      answer.destroy
-    end
+    return head :forbidden if !current_user&.author?(answer)
+    answer.destroy
   end
 
   def best
-    return if !current_user&.author?(answer)
+    return head :forbidden if !current_user&.author?(answer)
     answer.set_best_value
   end
 

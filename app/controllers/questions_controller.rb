@@ -16,7 +16,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    return if !current_user&.author?(question)
+    return head :forbidden if !current_user&.author?(question)
     question.update(question_params)
   end
 
