@@ -6,11 +6,11 @@ RSpec.describe QuestionsController, type: :controller do
   # метод let создаст метод questions который принимает блок и все это кэширует
   # let! - выполнит всю работу по созданию данных и помещения их в объект массива перед запуска каждого из тестов
   # let(:questions) { create_list(:question, 3) }
-  let(:question) { create(:question) }
-  let(:user) { create(:user) }
+  let(:author) { create(:author) }
+  let(:question) { create(:question, user: author) }
 
   # используем созданный нами хелпер login
-  before { login(user) }
+  before { login(author) }
   
   describe 'POST #create' do
     # context является элиfсом describe
@@ -50,7 +50,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'PATCH #update' do
     context 'whith valid attributes' do
       it 'change question attributes' do
-        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
 
         # reload обновит наш объект теми данными которые есть в БД
         question.reload
@@ -59,15 +59,15 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq 'new body'
       end
 
-      it 'redirects to updated question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
+      it 'render update view' do
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+        expect(response).to render_template :update
       end
     end
 
     context 'whith invalid attributes' do
       # этап выполнит код перед запуском каждого из тестов
-      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }
 
       # этапы проверки результата:
       it 'does not change question' do
@@ -78,15 +78,27 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq 'MyText'
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+      it 'render update view' do
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'Only the author can update his question' do
+      before { sign_in(create(:user)) }
+
+      it 'question body has not changed' do
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new question' }, format: :js }
+        question.reload
+
+        expect(question.title).to_not eq 'new title'
+        expect(question.body).to_not eq 'new question'
       end
     end
   end
 
   describe 'DELETE #destroy' do
     context 'Author of the question' do
-      let!(:question) { create(:question, user: user) }
+      let!(:question) { create(:question, user: author) }
 
       it 'delete the question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)

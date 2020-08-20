@@ -16,11 +16,8 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params)
-      redirect_to question_path(question)
-    else
-      render :edit
-    end
+    return head :forbidden if !current_user&.author?(question)
+    question.update(question_params)
   end
 
   def destroy

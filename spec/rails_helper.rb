@@ -46,6 +46,12 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
+  # Укажем драйвер selenium_chrome (selenium_chrome_headless) - запуск в фоне, позволит нам запускать для тестов с использованием JS запускать браузер ХРОМ вместо Файр Фокса
+  Capybara.javascript_driver = :selenium_chrome_headless
+
+  # Увеличим ожидание ответа Ajax до 5 секунд
+  Capybara.default_max_wait_time = 5
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.

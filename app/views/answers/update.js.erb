@@ -1,0 +1,9 @@
+document.querySelector(".answer-errors").innerHTML = "<%= render 'shared/errors', resource: answer %>";
+
+<% if !answer.errors.present? %>
+  <%# хелпер (j) экранирует выводимые данные и защитит нас от вредоносных JS инъекцый. Преобразуя все в текст %>
+  document.querySelector("#answer_id_<%= answer.id %>").innerHTML = "<%= j render answer %>";
+<% end %>
+
+<%#При объявдении переменной через let или const в консоле браузера бутет выброшено исключение о двойном объявлении переменной
+Так, что при указании переменной можно опустить let и const%>
