@@ -3,7 +3,7 @@
     = render @question
 
 .answers
-  = render question.answers.order(best: :desc)
+  = render question.answers.with_attached_files.order(best: :desc)
 
 .answer-errors
   = render 'shared/errors', resource: set_answer
