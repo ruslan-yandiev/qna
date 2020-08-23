@@ -79,6 +79,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # реализуем удаление ненужных файлов из тестов, чтобы не копить мусор добавленных файлов (удалим после прохождения папку storage)
+  config.after(:all) do
+    FileUtils.rm_rf("#{Rails.root}/tmp/storage")
+  end
 end
 
 Shoulda::Matchers.configure do |config|
