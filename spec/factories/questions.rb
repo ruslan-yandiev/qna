@@ -9,6 +9,11 @@ FactoryBot.define do
     body { "MyText" }
   end
 
+  trait :with_file do
+    # files { [Rack::Test::UploadedFile.new(Rails.root.join('spec', 'rails_helper.rb'))] }
+    files { [fixture_file_upload(Rails.root.join('spec', 'rails_helper.rb'))] }
+  end
+
   # для реализации не стандартного
   trait :invalid do
     title { nil }

@@ -92,3 +92,8 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+# подключим во все фабрики метод fixture_file_upload - это шорткат для Rack::Test::UploadedFile.new
+FactoryBot::SyntaxRunner.class_eval do
+  include ActionDispatch::TestProcess
+end

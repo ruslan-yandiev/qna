@@ -1,0 +1,3 @@
+<% if @attachment.destroyed? %>
+    document.querySelector("#attachment_id_<%= @attachment.id %>").remove();
+<% end %>
