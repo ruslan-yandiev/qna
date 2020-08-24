@@ -19,13 +19,14 @@ feature 'User can edit his question', "
     background do
       sign_in(author)
       visit question_path(question)
+      click_on 'Edit question'
     end
 
     scenario 'edits his question', js: true do
       within '.question' do
-        click_on 'Edit question'
         fill_in 'Title', with: 'new title'
         fill_in 'Body', with: 'new body'
+        
         click_on 'Save question'
 
         expect(page).to_not have_content question.body
@@ -37,8 +38,8 @@ feature 'User can edit his question', "
 
     scenario 'edits his question with errors', js: true do
       within '.question' do
-        click_on 'Edit question'
         fill_in 'Title', with: ''
+
         click_on 'Save question'
 
         expect(page).to have_content "Title can't be blank"
@@ -47,7 +48,6 @@ feature 'User can edit his question', "
 
     scenario 'edit the question and add files', js: true do
       within '.question' do
-        click_on 'Edit question'
         fill_in 'Title', with: 'new title'
         fill_in 'Body', with: 'new body'
         attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
