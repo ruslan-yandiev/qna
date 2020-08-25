@@ -1,10 +1,11 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: :show
 
   expose :questions, -> { Question.all }
   expose :question
+  # чтобы уменьшить количество запросов к базе при добавлении множества файлов, добавим скоуп (with_attached_files) - подгрузим вопрос сразу с файлами. решение проблемы n + 1
+  expose :load_question, -> { Question.with_attached_files.find(params[:id]) }
 
   def create
     question.user = current_user
@@ -31,12 +32,6 @@ class QuestionsController < ApplicationController
   end
 
   private
-
-  def load_question
-    # чтобы уменьшить количество запросов к базе при добавлении множества файлов, добавим скоуп (with_attached_files) - подгрузим вопрос сразу с файлами
-    # решение проблемы n + 1
-    @question = Question.with_attached_files.find(params[:id])
-  end
 
   def question_params
     params.require(:question).permit(:title, :body, files: [])
