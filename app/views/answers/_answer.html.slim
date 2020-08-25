@@ -5,6 +5,8 @@
 
     p
       = answer.body
+
+    = render 'attachments/attachment', resource: answer
       
     - if current_user&.author?(answer)
       p= link_to 'Delete answer', answer_path(answer), method: :delete, data: { confirm: 'Are you sure?' }, remote: true
@@ -21,5 +23,7 @@
     p
       = form.label :body, 'Your answer'
       = form.text_area :body
+      = form.label :files
+      = form.file_field :files, multiple: true, direct_upload: true
 
     p= form.submit 'Save'

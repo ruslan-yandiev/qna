@@ -8,6 +8,10 @@
   p
     =form.label :files
     / добавим пареметр multiple: true чтобы добавлять несколько файлов
-    =form.file_field :files, multiple: true
+    =form.file_field :files, multiple: true, direct_upload: true
 
   p=form.submit 'Ask'
+
+/ cl_image_upload_tag
+/ cl_image_path("myImage.jpg", :cloud_name => cloudname)
+/ :avatar

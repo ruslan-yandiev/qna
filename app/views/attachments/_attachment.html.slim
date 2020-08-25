@@ -1,0 +1,7 @@
+/ проверим есть ли прикрепленный файл с помощью метода attached?
+- if resource.files.attached?
+  - resource.files.each do |file|  
+    / resource.file.filename.to_s получим имя файла и преобразуем его к строке, resource.file хранит ссылку на файл и с помощью хелпера url_for получим эту ссылку(на объект)
+    p= link_to file.filename.to_s, url_for(file), id: "attachment_id_#{file.id}"
+    - if current_user&.author?(resource)
+      p= link_to 'Delete file', attachment_path(file), method: :delete, data: { confirm: 'Are you sure?' }, remote: true
