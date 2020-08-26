@@ -7,11 +7,18 @@
     =form.text_area :body
   p
     =form.label :files
-    / добавим пареметр multiple: true чтобы добавлять несколько файлов
+    / добавим пареметр multiple: true чтобы добавлять несколько файлов, direct_upload: true для установки прямой загрузки от клиента в облако
     =form.file_field :files, multiple: true, direct_upload: true
 
-  p=form.submit 'Ask'
+  p Links:
+  p
+    / для создания вложенной формы используем не form_with, а fields_for и передадим нашу ассоциацию links и передадим блок
+    = form.fields_for :links do |l|
+      p
+        = l.label :name, 'Link name'
+        = l.text_field :name
+      p
+        = l.label :url
+        = l.text_field :url
 
-/ cl_image_upload_tag
-/ cl_image_path("myImage.jpg", :cloud_name => cloudname)
-/ :avatar
+  p=form.submit 'Ask'

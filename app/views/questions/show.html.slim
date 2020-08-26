@@ -2,6 +2,13 @@
     .question-errors
     = render load_question
 
+.links
+  -if question.links.present?
+    p Links:
+    ul
+      -question.links.each do |link|
+        li= link_to link.name, link.url
+
 .answers
   = render question.answers.with_attached_files.order(best: :desc)
 

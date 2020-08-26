@@ -1,9 +1,11 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
+  before_action :links_to_question, only: :new
 
   expose :questions, -> { Question.all }
   expose :question
+
   # чтобы уменьшить количество запросов к базе при добавлении множества файлов, добавим скоуп (with_attached_files) - подгрузим вопрос сразу с файлами. решение проблемы n + 1
   expose :load_question, -> { Question.with_attached_files.find(params[:id]) }
 
@@ -33,7 +35,13 @@ class QuestionsController < ApplicationController
 
   private
 
+  # .build часто используют с ассоциацией вместо new чтобы показать, что создается именно полиморфная ассоциация
+  def links_to_question
+    question.links.new
+  end
+
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    # links_attributes: передадим в качестве одобренных параметров для внесения в базу параметры вложенной модели 
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
   end
 end
