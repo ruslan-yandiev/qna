@@ -1,6 +1,6 @@
 class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
-  has_many :links, dependent: :destroy
+  has_many :links, dependent: :destroy, as: :linkable # укажем, что эта связь полиморфная добавив хэш as: :linkable
   belongs_to :user
 
   # добавим декларацию, чтобы связать подключаемый файл(имеющий абстракцию в виде скрытой модели) с данной моделью (has_one_attached :file) для одного, (has_many_attached :files) - множество

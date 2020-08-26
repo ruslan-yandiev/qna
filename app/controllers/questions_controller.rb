@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
   before_action :links_to_question, only: :new
+  before_action :links_to_answer, only: :show
 
   expose :questions, -> { Question.all }
   expose :question
@@ -38,6 +39,11 @@ class QuestionsController < ApplicationController
   # .build часто используют с ассоциацией вместо new чтобы показать, что создается именно полиморфная ассоциация
   def links_to_question
     question.links.new
+  end
+
+  def links_to_answer
+    @answer = question.answers.new
+    @answer.links.build
   end
 
   def question_params

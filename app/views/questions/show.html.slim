@@ -2,7 +2,7 @@
     .question-errors
     = render load_question
 
-.links
+.question-links
   -if question.links.present?
     p Links:
     ul
@@ -13,6 +13,6 @@
   = render question.answers.with_attached_files.order(best: :desc)
 
 .answer-errors
-  = render 'shared/errors', resource: set_answer
+  = render 'shared/errors', resource: @answer
 
-= render template: 'answers/_form', locals: { question: question, answer: set_answer }
+= render template: 'answers/_form', locals: { question: question, answer: @answer }
