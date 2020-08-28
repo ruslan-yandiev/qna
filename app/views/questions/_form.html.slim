@@ -1,4 +1,4 @@
-= form_with model: question, local: true do |form|
+= form_with model: question, local: true, class: "question-create" do |form|
   p
     =form.label :title
     =form.text_field :title
@@ -21,4 +21,4 @@
         = l.label :url
         = l.text_field :url
 
-  p=form.submit 'Ask'
+  p=form.submit 'Ask', id: 'submit-create-ask'

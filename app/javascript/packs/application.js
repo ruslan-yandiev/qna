@@ -10,6 +10,8 @@ require("channels")
 require("../utilities/answer.js")
 require("../utilities/question.js")
 require("../utilities/direct_uploads.js")
+require("../utilities/question_link_forms.js")
+require("../utilities/answer_link_forms.js")
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
