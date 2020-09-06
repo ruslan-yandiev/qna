@@ -48,6 +48,6 @@ class QuestionsController < ApplicationController
 
   def question_params
     # links_attributes: передадим в качестве одобренных параметров для внесения в базу параметры вложенной модели 
-    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: %i[name url id _destroy])
   end
 end

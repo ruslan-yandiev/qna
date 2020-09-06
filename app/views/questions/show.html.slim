@@ -2,18 +2,6 @@
     .question-errors
     = render load_question
 
-.question-links
-  -if question.links.present?
-    p Links:
-    ul
-      -question.links.each do |link|
-        li
-          - if link.url.=~(%r{^(http|https|ftp)?://gist.github.com})
-              / raw безопаснее html_safe, так как предварительно вызовет .to_s
-              = raw("<script src=\'#{link.url}.js\'></script>")
-          - else
-              = link_to link.name, link.url
-
 .answers
   = render question.answers.with_attached_files.order(best: :desc)
 
