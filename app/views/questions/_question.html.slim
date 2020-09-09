@@ -19,4 +19,11 @@ h3= question.body
     = f.text_area :body
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
-    = f.submit 'Save question'
+    = f.fields_for :links do |l|
+      = l.label :name, 'Link name'
+      = l.text_field :name
+      = l.label :url
+      = l.text_field :url
+      
+    = f.submit 'Save question', id: 'submit-create-ask'
+    input type="button" value="add link" class="button-add-question-link"

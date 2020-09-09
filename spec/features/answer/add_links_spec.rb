@@ -10,6 +10,7 @@ feature 'User can add links to answer', %q{
   given!(:question) {create(:question)}
   given(:gist_url) {'https://gist.github.com/vkurennov/743f9367caa1039874af5a2244e1b44c'}
   given(:url) {'http://google.com'}
+  given(:url2) {'http://yandex.ru'}
 
   background do
     sign_in(user)
