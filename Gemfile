@@ -31,6 +31,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'slim-rails'
 gem 'devise'
 gem 'cloudinary'
+# Cocoon упрощает работу с вложенными формами.
+# gem 'cocoon'
 
 # библиотека позволит сократить стандартный код в контролерах
 gem 'decent_exposure', '3.0.0'
