@@ -12,6 +12,10 @@ class Answer < ApplicationRecord
   def set_best_value
     return if self.best
     question.answers.where(best: true).update(best: false)
-    transaction { update!(best: true) }
+
+    transaction do 
+      update!(best: true)
+      question.reward&.update!(user: user)
+    end
   end
 end
