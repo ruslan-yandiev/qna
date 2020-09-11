@@ -1,0 +1,17 @@
+-if resource.links.present?
+  p Links:
+  ul
+    -resource.links.each do |link|
+      li
+        - if link.url.=~(%r{^(http|https|ftp)?://gist.github.com})
+            / raw безопаснее html_safe, так как предварительно вызовет .to_s
+            = raw("<script src=\'#{link.url}.js\'></script>")
+        - else
+            = link_to link.name, link.url, id: "link_id_#{link.id}"
+            
+- if current_user&.author?(resource)              
+  = form_with model: resource do |form|
+    = form.fields_for :links do |l|
+      = l.label l.object.name
+      = l.check_box :_destroy
+    =form.submit 'Delete link'

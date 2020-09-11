@@ -14,8 +14,8 @@ RSpec.describe Answer, type: :model do
   end
 
   describe 'set_best_value' do
-    let(:user) { create(:user) }
-    let(:question) { create(:question, user: user) }
+    let!(:user) { create(:user) }
+    let!(:question) { create(:question, :with_reward, user: user) }
     let!(:answer) { create(:answer, question: question, user: user) }
     let!(:answer_2) { create(:answer, :best, question: question, user: user) }
 
@@ -23,6 +23,10 @@ RSpec.describe Answer, type: :model do
 
     it 'choose the best answer' do
       expect(answer).to be_best
+    end
+
+    it "should set a reward for answering a question" do
+      expect(user.rewards).to be_include(question.reward)
     end
 
     it 'should desable best for old answer' do

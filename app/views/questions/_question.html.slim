@@ -4,6 +4,9 @@ h3= question.body
 
 = render 'attachments/attachment', resource: question
 
+.question-links
+  = render 'links/link', resource: question
+
 - if current_user&.author?(question)
   p= link_to 'Delete', question_path(question), method: :delete, data: { confirm: 'Are you sure?' }
   |
@@ -16,4 +19,11 @@ h3= question.body
     = f.text_area :body
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
-    = f.submit 'Save question'
+    = f.fields_for :links do |l|
+      = l.label :name, 'Link name'
+      = l.text_field :name
+      = l.label :url
+      = l.text_field :url
+      
+    = f.submit 'Save question', id: 'submit-create-ask'
+    input type="button" value="add link" class="button-add-question-link"

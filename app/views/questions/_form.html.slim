@@ -1,14 +1,20 @@
-= form_with model: question, local: true do |form|
+= form_with model: question, local: true, class: "question-create" do |form|
   p
-    =form.label :title
-    =form.text_field :title
+    = form.label :title
+    = form.text_field :title
   p
-    =form.label :body
-    =form.text_area :body
+    = form.label :body
+    = form.text_area :body
   p
-    =form.label :files
+    = form.label :files
     / добавим пареметр multiple: true чтобы добавлять несколько файлов, direct_upload: true для установки прямой загрузки от клиента в облако
-    =form.file_field :files, multiple: true, direct_upload: true
+    = form.file_field :files, multiple: true, direct_upload: true
+  p
+    = form.fields_for :reward do |r|
+      = r.label :title, 'Reward title'
+      = r.text_field :title
+      = r.label :image, 'Image'
+      = r.file_field :image
 
   p Links:
   p
@@ -21,4 +27,5 @@
         = l.label :url
         = l.text_field :url
 
-  p=form.submit 'Ask'
+  =form.submit 'Ask', id: 'submit-create-ask'
+  input type="button" value="add link" class="button-add-question-link"

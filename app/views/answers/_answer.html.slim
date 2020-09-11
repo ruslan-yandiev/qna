@@ -9,11 +9,7 @@
     = render 'attachments/attachment', resource: answer
 
     .answer-links
-      -if answer.links.present?
-        p Links:
-        ul
-          -answer.links.each do |link|
-            li= link_to link.name, link.url
+      = render 'links/link', resource: answer
       
     - if current_user&.author?(answer)
       p= link_to 'Delete answer', answer_path(answer), method: :delete, data: { confirm: 'Are you sure?' }, remote: true
@@ -32,5 +28,11 @@
       = form.text_area :body
       = form.label :files
       = form.file_field :files, multiple: true, direct_upload: true
+      = form.fields_for :links do |l|
+        = l.label :name, 'Link name'
+        = l.text_field :name
+        = l.label :url
+        = l.text_field :url
 
-    p= form.submit 'Save'
+    = form.submit 'Save', id: "submit-edit-answer-#{answer.id}", class: "button-add-answer-link"
+    input type="button" value="Add link" class="button-edit-answer-link-#{answer.id}" id="button-add-answer-link"
