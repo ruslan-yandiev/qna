@@ -39,6 +39,9 @@ class QuestionsController < ApplicationController
   # .build часто используют с ассоциацией вместо new чтобы показать, что создается именно полиморфная ассоциация
   def links_to_question
     question.links.new
+
+    # question.reward = Reward.new
+    question.build_reward
   end
 
   def links_to_answer
@@ -48,6 +51,6 @@ class QuestionsController < ApplicationController
 
   def question_params
     # links_attributes: передадим в качестве одобренных параметров для внесения в базу параметры вложенной модели 
-    params.require(:question).permit(:title, :body, files: [], links_attributes: %i[name url id _destroy])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: %i[name url id _destroy], reward_attributes: %i[title image])
   end
 end
