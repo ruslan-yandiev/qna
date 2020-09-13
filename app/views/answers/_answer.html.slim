@@ -12,6 +12,7 @@
       = render 'links/link', resource: answer
       
     - if current_user&.author?(answer)
+      / если форма или ссылка не содержит по дефолту как form_with опцию отправки с помощью Ajax, то можно установить такую опцию вручную добавив remote: true 
       p= link_to 'Delete answer', answer_path(answer), method: :delete, data: { confirm: 'Are you sure?' }, remote: true
       |
       / вторым аргументом обычно идет путь(edit_answer_path(answer)), но мы поставим решотку(#) так как путь изменяться не будет, кнопка через скрипт будет работать

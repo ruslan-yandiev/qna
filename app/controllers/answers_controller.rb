@@ -8,10 +8,21 @@ class AnswersController < ApplicationController
   expose :answer
 
   def create
-    # @answer = answers.new(answer_params)
-    # @answer.user = current_user
-    # @answer.save
-    @answer = answers.create(answer_params.merge(user: current_user))
+    # @answer = answers.create(answer_params.merge(user: current_user))
+    @answer = answers.new(answer_params)
+    @answer.user = current_user
+
+    # блок формат имеет приоритет над вьюхами
+    # а значит проигнорирует связанный с этим экшеном вьюху create.js.erb
+    # и вернет для данные клиенту в указанных ниже форматах
+    respond_to do |format|
+      if @answer.save
+        format.html { render @answer }
+      else
+        # чтобы передача параметра для обработки его во вьюхе сработало из контроллера передадим его через хэш locals, изменим статус ответа на 422 для любого невалидного объекта
+        format.html { render partial: 'shared/errors', locals: { resource: @answer }, status: 422 } # unprocessable_entity почему то не работает
+      end
+    end
   end
 
   def update
