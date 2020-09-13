@@ -8,6 +8,8 @@ require("@rails/ujs").start()
 require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
+import "bootstrap"
+import "../stylesheets/application"
 require("../utilities/answer.js")
 require("../utilities/question.js")
 require("../utilities/direct_uploads.js")
