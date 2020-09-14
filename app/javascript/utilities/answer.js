@@ -23,16 +23,29 @@ document.addEventListener('turbolinks:load', function () {
     // Повесим обработчики событий на формы по созданию вопроса и события успешного и не успешного ajax:
     answerCreate.addEventListener('ajax:success', (event) => {
         // из события извлечем объект Промиса 
-        let xhr = event.detail[2];
+        // let xhr = event.detail[2];
+        // возьмем распарсеный объект json, чтобы избежать шага парсинга его из текста тут
+        let json = event.detail[0];
 
         // далее из объекта промиса извлечем наш не распарсеный html в виде строки и сразу добавим в наш DOMhtml element
         // answers.append(xhr.responseText); // почему то не корректно работает
-        answers.insertAdjacentHTML("beforeend", xhr.responseText);
+        // answers.insertAdjacentHTML("beforeend", xhr.responseText);
+
+        // answers.append('<p>' + json.body + '</p>');
+        answers.insertAdjacentHTML("beforeend", '<p>' + json.body + '</p>');
     });
 
     answerCreate.addEventListener('ajax:error', (event) => {
-        let xhr = event.detail[2];
+        let answerErrors = document.querySelector('.answer-errors');
 
-        document.querySelector('.answer-errors').innerHTML = xhr.responseText;
+        // let xhr = event.detail[2];
+        let jsonArrayErrors = event.detail[0];
+
+        jsonArrayErrors.forEach(error => {
+            // answerErrors.append('<p>' + error + '</p>');
+            answerErrors.insertAdjacentHTML("beforeend", '<p>' + error + '</p>');
+        });
+
+        // answerErrors.innerHTML = xhr.responseText;
     });
 });

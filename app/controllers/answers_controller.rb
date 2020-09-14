@@ -17,10 +17,14 @@ class AnswersController < ApplicationController
     # и вернет для данные клиенту в указанных ниже форматах
     respond_to do |format|
       if @answer.save
-        format.html { render @answer }
+        # format.html { render @answer }
+
+        format.json { render json: @answer }
       else
         # чтобы передача параметра для обработки его во вьюхе сработало из контроллера передадим его через хэш locals, изменим статус ответа на 422 для любого невалидного объекта
-        format.html { render partial: 'shared/errors', locals: { resource: @answer }, status: 422 } # unprocessable_entity почему то не работает
+        # format.html { render partial: 'shared/errors', locals: { resource: @answer }, status: 422 } # unprocessable_entity почему то не работает
+
+        format.json { render json: @answer.errors.full_messages, status: 422 }
       end
     end
   end
