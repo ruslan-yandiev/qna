@@ -41,7 +41,7 @@ class AnswersController < ApplicationController
   end
 
   def best
-    return head :forbidden if !current_user&.author?(answer)
+    return head :forbidden if !current_user&.author?(answer.question)
     answer.set_best_value
   end
 
