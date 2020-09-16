@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  include Voted
 
   before_action :authenticate_user!, except: %i[index show]
   before_action :links_to_question, only: :new
@@ -32,18 +33,6 @@ class QuestionsController < ApplicationController
     else
       redirect_to question, alert: 'You cannot delete this question'
     end 
-  end
-
-  def voteup
-    return head :forbidden if current_user&.author?(question)
-    question.vote_up(current_user)
-    render json: { votes: question.votes }
-  end
-
-  def votedown
-    return head :forbidden if current_user&.author?(question)
-    question.vote_down(current_user)
-    render json: { votes: question.votes }
   end
 
   private

@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  include Voted
 
   before_action :authenticate_user!, except: %i[index show]
   
@@ -43,18 +44,6 @@ class AnswersController < ApplicationController
   def best
     return head :forbidden if !current_user&.author?(answer.question)
     answer.set_best_value
-  end
-
-  def voteup
-    return head :forbidden if current_user&.author?(answer)
-    answer.vote_up(current_user)
-    render json: { votes: answer.votes }
-  end
-
-  def votedown
-    return head :forbidden if current_user&.author?(answer)
-    answer.vote_down(current_user)
-    render json: { votes: answer.votes }
   end
 
   private
