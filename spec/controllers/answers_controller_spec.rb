@@ -2,36 +2,33 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:author) { create(:author) }
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: author) }
   let(:answer) { create(:answer, question: question, user: author) }
+  let(:answer2) { create(:answer, question: question, user: user) }
 
   before { login(author) }
 
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question },format: :json }.to change(question.answers, :count).by(1)
       end
 
       it 'answer belongs to the author' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js
+        post :create, params: { answer: attributes_for(:answer), question_id: question },format: :json
         expect(question.answers.last.user_id).to eq(author.id)
-      end
-
-      it 'renders create template' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js
-        expect(response).to render_template :create
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :js }.to_not change(Answer, :count)
+        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }, format: :json }.to_not change(Answer, :count)
       end
 
       it 'renders create template' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question },format: :js
-        expect(response).to render_template :create
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question },format: :json
+        expect(response).to have_http_status 422
       end
     end
   end
@@ -124,6 +121,30 @@ RSpec.describe AnswersController, type: :controller do
         patch :best, params: { id: answer }, format: :js
         answer.reload
         expect(answer).not_to be_best
+      end
+    end
+  end
+
+  describe 'POST #voteup' do
+    context 'User tries to create a new up vote to a answer' do
+      it 'creates a new voice without being the author of the answer' do
+        expect { post :voteup, params: { id: answer2 }, format: :json }.to change(answer2.votes, :count).by(1)
+      end
+
+      it 'does not create a new voice by being the author of the answer' do
+        expect { post :voteup, params: { id: answer }, format: :json }.to_not change(answer.votes, :count)
+      end
+    end
+  end
+
+  describe 'POST #votedown' do
+    context 'User tries to create a new up vote to a answer' do
+      it 'creates a new voice without being the author of the answer' do
+        expect { post :votedown, params: { id: answer2 }, format: :json }.to change(answer2.votes, :count).by(1)
+      end
+
+      it 'does not create a new voice by being the author of the answer' do
+        expect { post :votedown, params: { id: answer }, format: :json }.to_not change(answer.votes, :count)
       end
     end
   end

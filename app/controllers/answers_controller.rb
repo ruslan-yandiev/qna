@@ -45,6 +45,18 @@ class AnswersController < ApplicationController
     answer.set_best_value
   end
 
+  def voteup
+    return head :forbidden if current_user&.author?(answer)
+    answer.vote_up(current_user)
+    render json: { votes: answer.votes }
+  end
+
+  def votedown
+    return head :forbidden if current_user&.author?(answer)
+    answer.vote_down(current_user)
+    render json: { votes: answer.votes }
+  end
+
   private
 
   def answer_params

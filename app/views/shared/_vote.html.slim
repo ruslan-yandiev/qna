@@ -1,0 +1,10 @@
+
+div id="vote-#{resource.class}-#{resource.id}"
+  b
+    | Likes:
+    span.like= resource.all_likes
+  
+    - if current_user && !current_user.author?(resource)
+        = link_to '+', polymorphic_path(resource, action: :voteup), method: :post, remote: true, data: { type: :json }
+        |
+        = link_to '-', polymorphic_path(resource, action: :votedown), method: :post, remote: true, data: { type: :json }

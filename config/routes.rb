@@ -4,8 +4,14 @@ Rails.application.routes.draw do
   root to: "questions#index"
 
   resources :questions do
+    member do
+      post 'voteup'
+      post 'votedown'
+    end
   	resources :answers, shallow: true, except: :index do
       patch :best, on: :member
+      post :voteup, on: :member
+      post :votedown, on: :member
     end
   end
 

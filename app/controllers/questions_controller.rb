@@ -31,7 +31,19 @@ class QuestionsController < ApplicationController
       redirect_to question, notice: 'Question succesfully deleted'
     else
       redirect_to question, alert: 'You cannot delete this question'
-    end
+    end 
+  end
+
+  def voteup
+    return head :forbidden if current_user&.author?(question)
+    question.vote_up(current_user)
+    render json: { votes: question.votes }
+  end
+
+  def votedown
+    return head :forbidden if current_user&.author?(question)
+    question.vote_down(current_user)
+    render json: { votes: question.votes }
   end
 
   private
