@@ -6,15 +6,15 @@ module Voted
   end
 
   def voteup
-    return head :forbidden if current_user&.author?(resource)
-    resource.vote_up(current_user)
-    render json: { votes: resource.votes }
+    return head :forbidden if current_user&.author?(@resource)
+    @resource.vote_up(current_user)
+    render json: { votes: @resource.votes }
   end
 
   def votedown
-    return head :forbidden if current_user&.author?(resource)
-    resource.vote_down(current_user)
-    render json: { votes: resource.votes }
+    return head :forbidden if current_user&.author?(@resource)
+    @resource.vote_down(current_user)
+    render json: { votes: @resource.votes }
   end
 
   private
