@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
   include Voted
 
-  before_action :authenticate_user!, except: %i[index show]
   before_action :links_to_question, only: :new
   before_action :links_to_answer, only: :show
 

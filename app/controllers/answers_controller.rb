@@ -1,7 +1,5 @@
 class AnswersController < ApplicationController
   include Voted
-
-  before_action :authenticate_user!, except: %i[index show]
   
   # гем 'decent_exposure' позволяет и в такой форме получать параметры, и можем не использовать before_action
   expose :question, id: :question_id
@@ -13,9 +11,6 @@ class AnswersController < ApplicationController
     @answer = answers.new(answer_params)
     @answer.user = current_user
 
-    # блок формат имеет приоритет над вьюхами
-    # а значит проигнорирует связанный с этим экшеном вьюху create.js.erb
-    # и вернет для данные клиенту в указанных ниже форматах
     respond_to do |format|
       if @answer.save
         # format.html { render @answer }
