@@ -9,3 +9,5 @@
   = render 'shared/errors', resource: @answer
 
 = render template: 'answers/_form', locals: { question: question, answer: @answer }
+
+= link_to 'Back', questions_path, remote: true

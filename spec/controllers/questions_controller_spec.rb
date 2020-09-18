@@ -8,6 +8,8 @@ RSpec.describe QuestionsController, type: :controller do
   # let(:questions) { create_list(:question, 3) }
   let(:author) { create(:author) }
   let(:question) { create(:question, user: author) }
+  let(:user) { create(:user) }
+  let(:question2) { create(:question, user: user) }
 
   # используем созданный нами хелпер login
   before { login(author) }
@@ -120,6 +122,30 @@ RSpec.describe QuestionsController, type: :controller do
       it 'redirects to index' do
         delete :destroy, params: { id: question }
         expect(response).to_not redirect_to questions_path
+      end
+    end
+  end
+
+  describe 'POST #voteup' do
+    context 'User tries to create a new up vote to a question' do
+      it 'creates a new voice without being the author of the question' do
+        expect { post :voteup, params: { id: question2.id }, format: :json }.to change(question2.votes, :count).by(1)
+      end
+
+      it 'does not create a new voice by being the author of the question' do
+        expect { post :voteup, params: { id: question }, format: :json }.to_not change(question.votes, :count)
+      end
+    end
+  end
+
+  describe 'POST #votedown' do
+    context 'User tries to create a new down vote to a question' do
+      it 'creates a new voice without being the author of the question' do
+        expect { post :votedown, params: { id: question2 }, format: :json }.to change(question2.votes, :count).by(1)
+      end
+
+      it 'does not create a new voice by being the author of the question' do
+        expect { post :votedown, params: { id: question }, format: :json }.to_not change(question.votes, :count)
       end
     end
   end

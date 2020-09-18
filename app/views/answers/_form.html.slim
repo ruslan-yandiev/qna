@@ -1,4 +1,8 @@
-= form_with model: [question, answer], class: "answer-create" do |form|
+/ можем указать какой тип ответа мы хотим получить data: { type: :html }
+/ то есть форму мы хотим отправить асинхронно через (Ajax - form_with по дефолту использует) но в качестве ответа мы хотим получит html
+/ И увидим как в заголовке запроса Accept будет уже text/html вместо ранее ожидаемого javascript, а в логах AnswersController#create as HTML
+/ data: { type: :json } Accept будет уже json вместо ранее ожидаемого javascript, а в логах AnswersController#create as json
+= form_with model: [question, answer], class: "answer-create", data: { type: :json } do |form|
   p
     = form.label :body
     = form.text_area :body
