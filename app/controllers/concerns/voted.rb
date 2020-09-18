@@ -2,7 +2,6 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!, except: %i[index show]
     before_action :resource, only: %i[voteup votedown]
   end
 

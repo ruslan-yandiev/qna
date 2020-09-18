@@ -1,5 +1,7 @@
 class AnswersController < ApplicationController
   include Voted
+
+  before_action :authenticate_user!, except: %i[index show]
   
   # гем 'decent_exposure' позволяет и в такой форме получать параметры, и можем не использовать before_action
   expose :question, id: :question_id
